@@ -1,34 +1,32 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GunShoot : MonoBehaviour
 {
+    [Header("Weapon Properties")]
+    public Camera fpsCam;
     public float damage = 10f;
     public float range = 100f;
     public float fireRate = 5f;
     public float impactForce = 30f;
-    public Camera fpsCam;
+    // public bool fullAuto = false;
+    // TODO fullAuto, semiAuto, burst
+    // TODO shotgun(multiple rays), sniper(scope)
 
-    public Animator animator;
+    [Header("Optional Effects")]
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
-    public string stateName;
 
     private float nextTimeToFire = 0f;
 
-    // Update is called once per frame
-    void Update()
+    public void Shoot(InputAction.CallbackContext ctx)
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
-        {
-            nextTimeToFire = Time.time + 1f / fireRate;
-            Shoot();
-        }
-    }
+        if (Time.time < nextTimeToFire)
+            return;
+        nextTimeToFire = Time.time + 1f / fireRate;
 
-    void Shoot()
-    {
-        animator.Play(stateName);
-        muzzleFlash.Play();
+        if (muzzleFlash != null)
+            muzzleFlash.Play();
 
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
@@ -42,8 +40,11 @@ public class GunShoot : MonoBehaviour
             if (hit.rigidbody != null)
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
 
-            GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(impactGO, 2f);
+            if (impactEffect != null)
+            {
+                GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGO, 2f);
+            }
         }
 
     }

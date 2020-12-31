@@ -11,7 +11,7 @@ public class WeaponSwitching : MonoBehaviour
         {
             float value = ctx.ReadValue<float>();
             int v = (int)Mathf.Clamp(value, -1, 1);
-            selectedWeapon = (selectedWeapon + v) % transform.childCount;
+            selectedWeapon = (selectedWeapon - v) % transform.childCount;
             if (selectedWeapon < 0)
                 selectedWeapon += transform.childCount;
             SelectWeapon();
