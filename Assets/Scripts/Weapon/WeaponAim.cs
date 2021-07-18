@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerAim : MonoBehaviour
+public class WeaponAim : MonoBehaviour
 {
     public Camera cam;
     public float zoomRatio = 2f;

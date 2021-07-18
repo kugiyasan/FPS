@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
         isJumping = ctx.performed;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Sprint and Movement
         MoveUpdate();
@@ -54,7 +54,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 m = inputMovement.x * playerBody.right + inputMovement.y * playerBody.forward;
         float speed = isSprinting ? sprintSpeed : walkSpeed;
 
-        controller.Move(m * speed * Time.deltaTime);
+        // controller.Move(m * speed * Time.deltaTime);
+        controller.Move(m * speed * Time.fixedDeltaTime);
     }
 
     void JumpUpdate()
@@ -65,7 +66,9 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && isJumping)
             yVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
-        controller.Move(Vector3.up * yVelocity * Time.deltaTime);
-        yVelocity += gravity * Time.deltaTime;
+        // controller.Move(Vector3.up * yVelocity * Time.deltaTime);
+        // yVelocity += gravity * Time.deltaTime;
+        controller.Move(Vector3.up * yVelocity * Time.fixedDeltaTime);
+        yVelocity += gravity * Time.fixedDeltaTime;
     }
 }
